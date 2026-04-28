@@ -283,7 +283,8 @@ def handle_paragraphs(element: _Element, potential_tags: Set[str], options: Extr
 
     # children
     processed_element = Element(element.tag)
-    for child in element.iter("*"):
+    processed_element.text = element.text
+    for child in element.iterdescendants("*"):
         if child.tag not in potential_tags and child.tag != "done":
             _log_event("unexpected in p", child.tag, child.text)
             continue

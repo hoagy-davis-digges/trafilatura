@@ -423,9 +423,25 @@ def convert_tags(
     return tree
 
 
+def html_list_tag(elem: _Element) -> str:
+    "Convert internal list tags back to their original HTML list type."
+    rend = elem.get("rend")
+    return rend if rend in {"dl", "ol", "ul"} else "ul"
+
+
+def html_item_tag(elem: _Element) -> str:
+    "Convert internal description-list items back to dt/dd when available."
+    rend = elem.get("rend", "")
+    if rend.startswith("dt-"):
+        return "dt"
+    if rend.startswith("dd-"):
+        return "dd"
+    return "li"
+
+
 HTML_CONVERSIONS = {
-    "list": "ul",
-    "item": "li",
+    "list": html_list_tag,
+    "item": html_item_tag,
     "code": "pre",
     "quote": "blockquote",
     "head": lambda elem: f"h{int(elem.get('rend', 'h3')[1:])}",
@@ -467,4 +483,4 @@ def build_html_output(document: Document, with_metadata: bool = False) -> str:
                 SubElement(head, "meta", name=item, content=value)
         html_tree.insert(0, head)
 
-    return tostring(html_tree, pretty_print=True, encoding="unicode").strip()
+    return tostring(html_tree, pretty_print=False, encoding="unicode").strip()
