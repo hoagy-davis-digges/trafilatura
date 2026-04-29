@@ -466,6 +466,10 @@ def convert_to_html(tree: _Element) -> _Element:
             elem.set("href", elem.attrib.pop("target", ""))
         else:
             elem.attrib.clear()
+    for elem in tree.iter("dt", "dd"):
+        next_elem = elem.getnext()
+        if next_elem is not None and next_elem.tag in {"dt", "dd"}:
+            elem.tail = " "
     tree.tag = "body"
     root = Element("html")
     root.append(tree)

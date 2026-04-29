@@ -1455,6 +1455,8 @@ def test_list_processing():
       <item rend="dt-2">Milk</item>
       <item rend="dd-2">White cold drink</item>
     </list>''' in my_result
+    my_result = extract(htmlstring, fast=True, output_format='html', config=ZERO_CONFIG)
+    assert '<dt>Coffee</dt> <dd>Black hot drink</dd> <dt>Milk</dt> <dd>White cold drink</dd>' in my_result
     list_item_with_child = html.fromstring("<list><item><p>text</p></item></list>")
     processed_list = handle_lists(list_item_with_child, options)
     result = [(child.tag, child.text) if child.text is not None else child.tag for child in processed_list.iter()]
