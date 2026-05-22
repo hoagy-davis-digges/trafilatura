@@ -70,9 +70,15 @@ def handle_titles(element: _Element, options: Extractor) -> Optional[_Element]:
 def handle_formatting(element: _Element, options: Extractor) -> Optional[_Element]:
     '''Process formatting elements (b, i, etc. converted to hi) found
        outside of paragraphs'''
+    original_tail = element.tail
+    tail_space = " " if original_tail and original_tail.isspace() and element.getnext() is not None else None
     formatting = process_node(element, options)
     if formatting is None:  #  and len(element) == 0
         return None
+    if tail_space and formatting.tail is None:
+        formatting.tail = tail_space
+    elif original_tail and original_tail[0].isspace() and original_tail.strip() and formatting.tail:
+        formatting.tail = f" {formatting.tail}"
 
     # repair orphan elements
     # if formatting is None:

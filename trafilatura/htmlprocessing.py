@@ -487,4 +487,4 @@ def build_html_output(document: Document, with_metadata: bool = False) -> str:
                 SubElement(head, "meta", name=item, content=value)
         html_tree.insert(0, head)
 
-    return tostring(html_tree, pretty_print=False, encoding="unicode").strip()
+    return tostring(html_tree, pretty_print=True, encoding="unicode").strip()

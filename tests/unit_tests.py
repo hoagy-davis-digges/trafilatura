@@ -336,6 +336,10 @@ def test_formatting():
     assert my_result == '### Title\n\n**This here is in bold font.**Non-bold here'
     assert extract(my_string, output_format='markdown', config=ZERO_CONFIG) == my_result
     assert '<hi rend="#b">' in etree.tostring(bare_extraction(my_string, output_format='markdown', config=ZERO_CONFIG).body, encoding="unicode")
+    my_string = '<html><body><main><div><strong>Salary:</strong>\n\n <span>£50</span></div><div><strong>Hours Per Week</strong>\n <span><span>36.25 hours</span></span></div></main></body></html>'
+    my_result = extract(my_string, output_format='html', include_formatting=True, config=ZERO_CONFIG, favor_recall=True)
+    assert '<strong>Salary:</strong> £50' in my_result
+    assert '<strong>Hours Per Week</strong> 36.25 hours' in my_result
 
     meta_string = '<html><head><title>Test</title></head><body><p>ABC.</p></body></html>'
     meta_result = extract(meta_string, output_format='markdown', config=ZERO_CONFIG, with_metadata=True)
